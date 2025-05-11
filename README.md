@@ -168,7 +168,7 @@ DELETE /images/:filename
 1. Clone โปรเจค
 
 ```bash
-git clone https://github.com/yourusername/image-storage-service.git
+git clone https://github.com/mengsosool/image-storage-service.git
 cd image-storage-service
 ```
 
