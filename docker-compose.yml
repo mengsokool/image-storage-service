@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  app:
+    image: ghcr.io/mengsokool/image-storage-service:latest
+    container_name: image-storage-service
+    restart: unless-stopped
+    ports:
+      - "5100:5100"
+    volumes:
+      - image-uploads:/app/uploads
+    environment:
+      - NODE_ENV=production
+      - PORT=5100
+    networks:
+      - app-network
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  watchtower:
+    image: containrrr/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=300 # ตรวจสอบการอัพเดททุก 5 นาที (300 วินาที)
+      - WATCHTOWER_LABEL_ENABLE=true # เปิดใช้งานการตรวจสอบเฉพาะ container ที่มี label
+    networks:
+      - app-network
+    command: --label-enable # ให้ watchtower ดูแลเฉพาะ container ที่มี label com.centurylinklabs.watchtower.enable=true
+
+volumes:
+  image-uploads:
+    driver: local
+
+networks:
+  app-network:
+    driver: bridge 
