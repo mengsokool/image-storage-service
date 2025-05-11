@@ -1,9 +1,18 @@
 import express from 'express';
 import multer from 'multer';
+import cors from 'cors';
 import { FileSystemImageStorageAdapter } from './adapters/file-system-image-storage.adapter';
 import { ImageController } from './controllers/image.controller';
 
 const app = express();
+
+// ตั้งค่า CORS
+app.use(cors({
+  origin: '*', // อนุญาตทุกโดเมน (ในการใช้งานจริงควรระบุเฉพาะโดเมนที่อนุญาต)
+  methods: ['GET', 'POST', 'DELETE'],
+  allowedHeaders: ['Content-Type']
+}));
+
 const upload = multer({ storage: multer.memoryStorage() });
 const imageStorage = new FileSystemImageStorageAdapter();
 const imageController = new ImageController(imageStorage);
