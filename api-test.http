@@ -1,0 +1,20 @@
+### อัพโหลดรูปภาพ
+POST http://localhost:5100/images
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary
+
+------WebKitFormBoundary
+Content-Disposition: form-data; name="image"; filename="test.jpg"
+Content-Type: image/jpeg
+
+< ./test.jpg
+------WebKitFormBoundary--
+
+### ดึงรูปภาพตามชื่อไฟล์
+GET http://localhost:5100/images/1709123456789-test.jpg
+
+### แสดงรายการรูปภาพทั้งหมด
+GET http://localhost:5100/images
+
+### ลบรูป
+DELETE http://localhost:5100/images/FILENAME_TO_DELETE
+# แทนที่ FILENAME_TO_DELETE ด้วยชื่อไฟล์ที่ต้องการลบ
