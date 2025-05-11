@@ -23,6 +23,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Debug information
+        run: |
+          echo "Git ref: ${{ github.ref }}"
+          echo "Git tag: ${{ github.ref_name }}"
+          echo "Event name: ${{ github.event_name }}"
+
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
@@ -36,9 +42,8 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=tag
+            type=ref,event=tag,prefix=v
             type=raw,value=latest,enable={{is_default_branch}}
-            type=sha,format=short
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
