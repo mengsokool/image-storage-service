@@ -9,14 +9,14 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 # คัดลอกไฟล์ package.json และ pnpm-lock.yaml (ถ้ามี)
 COPY package.json pnpm-lock.yaml* ./
 
-# ติดตั้ง dependencies
+# ติดตั้ง dependencies ทั้งหมด (รวม devDependencies)
 RUN pnpm install --frozen-lockfile
 
 # คัดลอก source code
 COPY . .
 
-# Build โปรเจค
-RUN pnpm run build
+# Build โปรเจคด้วย TypeScript Compiler
+RUN npx tsc
 
 # Production stage
 FROM node:20-alpine
@@ -36,7 +36,7 @@ RUN pnpm install --prod --frozen-lockfile
 COPY --from=builder /app/dist ./dist
 
 # สร้างโฟลเดอร์ uploads
-RUN mkdir uploads
+RUN mkdir uploads && chmod 777 uploads
 
 # ตั้งค่า environment variables
 ENV NODE_ENV=production
